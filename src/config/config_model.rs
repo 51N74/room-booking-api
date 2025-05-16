@@ -8,7 +8,7 @@ pub struct DotEnvyConfig {
 pub struct Server{
     pub port:u16,
     pub body_limit:u32,
-    pub timeout:u32,
+    pub timeout:u64,
 }
 
 #[derive(Debug,Clone)]
