@@ -1,4 +1,4 @@
-use room_booking_api::config::config_loader;
+use room_booking_api::{config::config_loader, infrastructure::postgres::postgres_connection};
 use tracing::info;
 
 #[tokio::main]
@@ -15,7 +15,17 @@ async fn main() {
         }
     };
 
-    info!("Env has been loaded {:?}", dotenvy_env);
+    info!("Env has been loaded successfully");
+
+    let postgres_pool = match postgres_connection::create_pool(&dotenvy_env.database.url){
+        Ok(pool)=>pool,
+        Err(e)=>{
+            tracing::error!("Failed to create postgres pool: {}", e);
+            std::process::exit(1);
+        }
+    };
+
+    info!("Postgres connection has been established");
 
 
 }
