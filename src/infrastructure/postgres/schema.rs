@@ -1,6 +1,18 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
+    admin (id) {
+        id -> Int4,
+        #[max_length = 255]
+        username -> Varchar,
+        #[max_length = 255]
+        password -> Varchar,
+        created_at -> Timestamp,
+        updated_at -> Timestamp,
+    }
+}
+
+diesel::table! {
     bookings (id) {
         id -> Int4,
         user_id -> Int4,
@@ -21,12 +33,11 @@ diesel::table! {
 diesel::table! {
     rooms (id) {
         id -> Int4,
-        #[max_length = 50]
-        room_number -> Varchar,
+        room_number -> Int4,
         #[max_length = 100]
         room_type -> Varchar,
         capacity -> Int4,
-        price_per_night -> Numeric,
+        price_per_night -> Int4,
         amenities -> Nullable<Text>,
         description -> Nullable<Text>,
         is_available -> Bool,
@@ -57,7 +68,11 @@ diesel::table! {
     }
 }
 
+diesel::joinable!(bookings -> rooms (room_id));
+diesel::joinable!(bookings -> users (user_id));
+
 diesel::allow_tables_to_appear_in_same_query!(
+    admin,
     bookings,
     rooms,
     users,
